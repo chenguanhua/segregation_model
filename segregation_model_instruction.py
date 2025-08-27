@@ -3,6 +3,13 @@ import streamlit.components.v1 as components
 import random
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+import matplotlib.colors as mcolors
+
+# Define the colors and their positions
+colors = ['white', 'blue', 'red'] # (value, color) pairs
+
+# Create the colormap
+custom_cmap = mcolors.LinearSegmentedColormap.from_list("BlueBlackRed", colors)
 
 st.title("Schelling's Segregation Model")
 
@@ -158,15 +165,13 @@ def move_unsatisfied(grid, threshold):
 def schelling_simulation(size, empty_ratio, group_ratio, threshold, iterations):
     """Run Schelling's segregation simulation."""
     grid = create_grid(size, empty_ratio, group_ratio)
-    print("Initial Grid:")
     history = [display_grid(grid)]
 
     for i in range(iterations):
         info.markdown(f"Creating Simulation: {(i+1)/iterations*100:.2f}%.")
         move_unsatisfied(grid, threshold)
-
         history.append(display_grid(grid))
-        plt.pause(0.1)
+        plt.pause(0.02)
 
     return history
 
@@ -190,13 +195,13 @@ if st.session_state.show_run_simulation:
     st.sidebar.title("Parameters")
 
     # Parameters
-    size = int(st.sidebar.text_input("Input the grid size:", 50))  # Grid size
+    size = int(st.sidebar.text_input("Input the grid size:", 100))  # Grid size
     threshold = float(
         st.sidebar.slider("Select the similarity threshold:", 0.0, 1.0, 0.5))  # Similarity threshold for satisfaction
 
     empty_ratio = 0.2  # Percentage of empty spaces
     group_ratio = 0.8  # Percentage of cells occupied by residents
-    iterations = 20  # Number of iterations
+    iterations = 30  # Number of iterations
 
     if st.sidebar.button("Run"):
         history = schelling_simulation(size, empty_ratio, group_ratio, threshold, iterations)
@@ -204,11 +209,11 @@ if st.session_state.show_run_simulation:
         def frame(i):
             ax.clear()
             ax.set_title(f"Iteration {i}")
-            ax.imshow(history[i])
+            ax.imshow(history[i], cmap=custom_cmap)
 
 
         fig, ax = plt.subplots(figsize=(8, 6))
 
-        anim = FuncAnimation(fig, frame, interval=100, frames=len(history), repeat=False)
+        anim = FuncAnimation(fig, frame, interval=50, frames=len(history), repeat=False)
         components.html(anim.to_jshtml(), height=1000)
 
