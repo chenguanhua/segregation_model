@@ -6,7 +6,21 @@ from matplotlib.animation import FuncAnimation
 
 st.title("Schelling's Segregation Model")
 
-components.iframe("http://nifty.stanford.edu/2014/mccown-schelling-model-segregation/", width=800, height=600, scrolling=True)
+# components.iframe("http://nifty.stanford.edu/2014/mccown-schelling-model-segregation/", width=800, height=600, scrolling=True)
+import streamlit as st
+
+st.markdown("""
+### Schelling's Segregation Model
+
+Schelling's Segregation Model is a simple agent-based model demonstrating how small individual preferences can lead to large-scale segregation patterns.  
+In the model:
+- A grid represents a neighborhood.
+- Agents belong to two groups (e.g., red and blue).
+- Each agent prefers that a certain percentage of its neighbors are of the same group (the **tolerance level**).
+- If the tolerance is not met, the agent moves to an empty location.
+
+Over time, even with mild preferences, the system often evolves into highly segregated neighborhoods — illustrating how local behaviors can lead to unintended global patterns.
+""")
 
 st.markdown("Below are the specific steps that lead to a working simulation, please complete each piece of code in an orderly manner.")
 
